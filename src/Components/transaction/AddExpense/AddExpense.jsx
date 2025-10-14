@@ -7,6 +7,13 @@ const AddExpense = () => {
   const [description, setDescription] = useState('');
   const [expenses, setExpenses] = useState([]);
 
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  const todayFormatted = today.toISOString().split('T')[0];
+const yesterdayFormatted = yesterday.toISOString().split('T')[0];
+
   const handleSave = () => {
     const newExpense = {
       amount,
@@ -19,6 +26,21 @@ const AddExpense = () => {
     console.log([...expenses, newExpense]);
   }
 
+  const getExpensesByDate = () => {
+    const groupedExpenses = {};
+
+    expenses.forEach((expense) => {
+      if (groupedExpenses[expense.date]) {
+        groupedExpenses[expense.date].push(expense);
+      } else {
+        groupedExpenses[expense.date] = [expense]
+      }
+    });
+    return groupedExpenses;
+  }
+
+
+  const expensesByDate = getExpensesByDate();
 
   return (
     <div className="container">
@@ -71,6 +93,34 @@ const AddExpense = () => {
       </div>
 
       <button onClick={handleSave}>Save Expense</button>
+
+      <div className="expenses-list">
+        {Object.keys(expensesByDate).map((dateKey) => {
+          const expensesForDate = expensesByDate[dateKey];
+
+          let header;
+          if(dateKey === todayFormatted) {
+            header = "Today";
+          } else if (dateKey === yesterdayFormatted) {
+            header = "Yesterday";
+          } else {
+            header = dateKey;
+          }
+
+          return (
+            <div key={dateKey}>
+              <p>{header}</p>
+              {expensesForDate.map((expense, index) => (
+                <div key={index}>
+                  <span>{expense.category}</span>
+                  <span>${expense.amount}</span>
+                </div>
+              ))}
+            </div>
+          )
+        })}
+      </div>
+
     </div>
   )
 }
