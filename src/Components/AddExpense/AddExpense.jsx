@@ -1,29 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import "./AddExpense.css"
 
-const AddExpense = () => {
+const AddExpense = ({expenses, setExpenses}) => {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
 
-  // Load from localStorage when component first mounts
-  const [expenses, setExpenses] = useState(() => {
-    try {
-      const savedExpenses = localStorage.getItem('expenses');
-      if (savedExpenses && savedExpenses !== 'undefined') {
-        return JSON.parse(savedExpenses);
-      }
-    } catch (error) {
-      console.error('Error loading expenses from localStorage:', error);
-    }
-    return [];
-  });
-
-  // Save to localStorage whenever expenses change
-  useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-  }, [expenses]); // This runs every time expenses changes
 
   const today = new Date();
   const yesterday = new Date();
