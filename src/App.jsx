@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
-import AddExpense from './Components/transaction/AddExpense/AddExpense'
+import AddExpense from './Components/AddExpense/AddExpense'
 Route
 
 function App() {
