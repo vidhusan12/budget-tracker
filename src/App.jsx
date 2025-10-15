@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
 import AddExpense from './Components/AddExpense/AddExpense'
-Route
+import Dashboard from './Components/Dashboard/Dashboard';
+import Navbar from './Components/Navbar/Navbar';
+
 
 function App() {
 
@@ -19,6 +21,11 @@ function App() {
     return [];
   });
 
+  // state for income, bills, saving 
+  const [income, setIncome] = useState(0);
+  const [bills, setBills] = useState(0);
+  const [savings, setSavings] = useState(0);
+
   // Save to localStorage whenever expenses change
   useEffect(() => {
     localStorage.setItem('expenses', JSON.stringify(expenses));
@@ -27,7 +34,11 @@ function App() {
 
   return (
     <>
-      <AddExpense expenses={expenses} setExpenses={setExpenses}/>
+    <Navbar />
+      <Routes>
+        <Route path="/" element={<Dashboard expenses={expenses} income={income} bills={bills} savings={savings} />} />
+        <Route path="/add-expense" element={<AddExpense expenses={expenses} setExpenses={setExpenses} />} />
+      </Routes>
     </>
   )
 }
