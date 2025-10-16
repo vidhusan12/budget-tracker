@@ -1,0 +1,84 @@
+.savings-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px;
+  text-align: center;
+}
+
+.savings-container h1 {
+  font-size: 32px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+
+}
+
+.savings-container > p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.savings-input {
+  margin-bottom: 30px;
+
+}
+
+.savings-input label {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.savings-input input {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.savings-input input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.savings-container button {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 40px;
+
+}
+
+.savings-container button:hover {
+  background-color: #229954;
+}
+
+.current-savings {
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.current-savings h3 {
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.current-savings p {
+  font-size: 36px;
+  font-weight: bold;
+  color: #27ae60;
+  margin: 0;
+}

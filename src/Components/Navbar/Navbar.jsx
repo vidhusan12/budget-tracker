@@ -14,6 +14,7 @@ const Navbar = () => {
           <li><Link to="/add-expense"> Add Transcation</Link></li>
           <li><Link to="/add-income">Add Income</Link></li>
           <li><Link to="/add-bills">Add Bills</Link></li>
+          <li><Link to="/add-savings">Add Savings</Link></li>
         </ul>
       </div>
 
