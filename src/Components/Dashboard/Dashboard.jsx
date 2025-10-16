@@ -18,9 +18,18 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
     return totalWeekly
   }
 
-  const weeklyIncome = calculateWeeklyIncome()
+  function calculateWeeklyBills() {
+    let totalWeekly = 0;
+    bills.forEach((bill) => {
+      totalWeekly += bill.amount / 4
+    })
+    return totalWeekly
+  }
+
+  const weeklyIncome = calculateWeeklyIncome();
+  const weeklyBills = calculateWeeklyBills();
   // Income - Bills - Savings = Available to spend
-  const weeklySpendingLimit = weeklyIncome - bills - savings;
+  const weeklySpendingLimit = weeklyIncome - weeklyBills - savings;
 
 
 
@@ -42,7 +51,7 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
         </div>
         <div className="budget-item">
           <span className='label'>Bills</span>
-          <span className='amount bills-amount'>${bills}</span>
+          <span className='amount bills-amount'>${weeklyBills.toFixed(2)}</span>
         </div>
         <div className="budget-item">
           <span className='label'>Savings</span>

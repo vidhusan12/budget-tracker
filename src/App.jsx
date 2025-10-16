@@ -5,6 +5,7 @@ import AddExpense from './Components/AddExpense/AddExpense'
 import Dashboard from './Components/Dashboard/Dashboard';
 import Navbar from './Components/Navbar/Navbar';
 import AddIncome from './Components/AddIncome/AddIncome';
+import AddBills from './Components/AddBills/AddBills';
 
 
 function App() {
@@ -21,6 +22,12 @@ function App() {
     }
     return [];
   });
+
+  // Save to localStorage whenever expenses change
+  useEffect(() => {
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+  }, [expenses]); // This runs every time expenses changes
+
 
   // state for income, bills, saving 
   const [incomes, setIncomes] = useState(() => {
@@ -39,13 +46,23 @@ function App() {
     localStorage.setItem('incomes', JSON.stringify(incomes));
   }, [incomes]);
 
-  const [bills, setBills] = useState(0);
+  const [bills, setBills] = useState(() => {
+    try {
+      const savedBills = localStorage.getItem('bills');
+      if (savedBills && savedBills !== 'undefined') {
+        return JSON.parse(savedBills)
+      }
+    } catch (error) {
+      console.error('Error loading bills from localStorage', error)
+    }
+    return []
+  });
+
+  useEffect(() => {
+    localStorage.setItem('bills', JSON.stringify(bills));
+  }, [bills])
   const [savings, setSavings] = useState(0);
 
-  // Save to localStorage whenever expenses change
-  useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-  }, [expenses]); // This runs every time expenses changes
 
 
   return (
@@ -55,6 +72,7 @@ function App() {
         <Route path="/" element={<Dashboard expenses={expenses} incomes={incomes} bills={bills} savings={savings} />} />
         <Route path="/add-expense" element={<AddExpense expenses={expenses} setExpenses={setExpenses} />} />
         <Route path="/add-income" element={<AddIncome incomes={incomes} setIncomes={setIncomes} />} />
+        <Route path="/add-bills" element={<AddBills bills={bills} setBills={setBills} />} />
       </Routes>
     </>
   )
