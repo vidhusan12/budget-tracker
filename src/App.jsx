@@ -22,7 +22,22 @@ function App() {
   });
 
   // state for income, bills, saving 
-  const [income, setIncome] = useState(0);
+  const [incomes, setIncomes] = useState(() => {
+    try {
+      const savedIncomes = localStorage.getItem('incomes');
+      if (savedIncomes && savedIncomes !== 'undefined') {
+        return JSON.parse(savedIncomes);
+      }
+    } catch (error) {
+      console.error('Error loading incomes from localStorage: ', error)
+    }
+    return []
+  });
+
+  useEffect(() => {
+    localStorage.setItem('incomes', JSON.stringify(incomes));
+  }, [incomes]);
+
   const [bills, setBills] = useState(0);
   const [savings, setSavings] = useState(0);
 
@@ -34,9 +49,9 @@ function App() {
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <Routes>
-        <Route path="/" element={<Dashboard expenses={expenses} income={income} bills={bills} savings={savings} />} />
+        <Route path="/" element={<Dashboard expenses={expenses} incomes={incomes} bills={bills} savings={savings} />} />
         <Route path="/add-expense" element={<AddExpense expenses={expenses} setExpenses={setExpenses} />} />
       </Routes>
     </>

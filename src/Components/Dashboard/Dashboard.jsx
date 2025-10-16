@@ -1,10 +1,28 @@
 import React from 'react'
 import './Dashboard.css'
 
-const Dashboard = ({ expenses, income, bills, savings }) => {
+const Dashboard = ({ expenses, incomes, bills, savings }) => {
   // Calculate weekly spending limit
+  function calculateWeeklyIncome() {
+    let totalWeekly = 0;
+
+    incomes.forEach((income) => {
+      if (income.frequency === 'weekly') {
+        totalWeekly += income.amount
+      } else if (income.frequency === 'fortnightly') {
+        totalWeekly += income.amount / 2
+      } else if (income.frequency === 'monthly') {
+        totalWeekly += income.amount / 4
+      }
+    })
+    return totalWeekly
+  }
+
+  const weeklyIncome = calculateWeeklyIncome()
   // Income - Bills - Savings = Available to spend
-  const weeklySpendingLimit = income - bills - savings;
+  const weeklySpendingLimit = weeklyIncome - bills - savings;
+
+
 
 
   return (
@@ -20,7 +38,7 @@ const Dashboard = ({ expenses, income, bills, savings }) => {
       <div className="budget-grid">
         <div className="budget-item">
           <span className='label'>Income</span>
-          <span className='amount income-amount'>${income}</span>
+          <span className='amount income-amount'>${weeklyIncome.toFixed(2)}</span>
         </div>
         <div className="budget-item">
           <span className='label'>Bills</span>
