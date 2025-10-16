@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 import AddExpense from './Components/AddExpense/AddExpense'
 import Dashboard from './Components/Dashboard/Dashboard';
 import Navbar from './Components/Navbar/Navbar';
+import AddIncome from './Components/AddIncome/AddIncome';
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard expenses={expenses} incomes={incomes} bills={bills} savings={savings} />} />
         <Route path="/add-expense" element={<AddExpense expenses={expenses} setExpenses={setExpenses} />} />
+        <Route path="/add-income" element={<AddIncome incomes={incomes} setIncomes={setIncomes} />} />
       </Routes>
     </>
   )
