@@ -6,21 +6,48 @@ const AddIncome = ({ incomes, setIncomes }) => {
   const [amount, setAmount] = useState('');
   const [frequency, setFrequency] = useState('');
   const [description, setDescription] = useState('');
+  const [editingId, setEditingId] = useState(null);
 
   // Handle Function
   function handleSave() {
-    const newIncome = {
-      amount: Number(amount),
-      frequency: frequency,
-      description: description
+    if (editingId !== null) {
+      // Editing existing income
+      const updatedIncomes = incomes.map((income) => {
+        if (income.id === editingId) {
+          return { ...income, amount: Number(amount), frequency: frequency, description: description }
+        } else {
+          return income
+        }
+      });
+      setIncomes(updatedIncomes)
+    } else {
+      const newIncome = {
+        id: Date.now(),
+        amount: Number(amount),
+        frequency: frequency,
+        description: description
+      };
+      setIncomes(preIncomes => [...preIncomes, newIncome]);
     }
-
-    setIncomes(prevIncomes => [...prevIncomes, newIncome])
+    // Clear form
     setAmount('')
     setFrequency('')
     setDescription('')
+    setEditingId(null)
 
   }
+
+  function handleEdit(income) {
+    setAmount(income.amount)
+    setFrequency(income.frequency)
+    setDescription(income.description)
+    setEditingId(income.id)
+  }
+
+  function handleDelete(id) {
+    setIncomes(incomes.filter((income) => income.id !== id))
+  }
+
   return (
     <div className="container">
       <div className="left-box">
@@ -55,15 +82,23 @@ const AddIncome = ({ incomes, setIncomes }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)} />
         </div>
-        <button onClick={handleSave}>Save Income</button>
+        <button onClick={handleSave}>
+          {editingId ? 'Update Income' : 'Save Income'}
+        </button>
       </div>
 
       <div className="right-box">
         <div className="incomes-list">
-          {incomes.map((income, index) => (
-            <div key={index}>
-              <p>{income.description}</p>
-              <p>${income.amount} ({income.frequency})</p>
+          {incomes.map((income) => (
+            <div key={income.id} className='income-item'>
+              <div className="income-info">
+                <p><strong>{income.description}</strong></p>
+                <p>${income.amount} ({income.frequency})</p>
+              </div>
+              <div className="income-actions">
+                <button onClick={() => handleEdit(income)}>Edit</button>
+                <button onClick={() => handleDelete(income.id)}>Delete</button>
+              </div>
             </div>
           ))}
         </div>

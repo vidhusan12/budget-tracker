@@ -85,3 +85,41 @@
   font-weight: 600;
   color: #333;
 }
+
+.income-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.income-item p {
+  margin: 5px 0;
+}
+
+.income-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.income-actions button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.income-actions button:first-child {
+  background-color: #3498db;
+  color: white;
+}
+.income-actions button:last-child {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.income-actions button:hover {
+  opacity: 0.8;
+}
