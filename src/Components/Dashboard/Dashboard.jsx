@@ -26,10 +26,32 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
     return totalWeekly
   }
 
+  function calculateWeeklyExpenses() {
+    let totalExpenses = 0;
+    const today = new Date();
+
+    // calculating the start of the week
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    startOfWeek.setHours(0, 0, 0, 0) // resets the time to midnight;
+
+    expenses.forEach((expense) => {
+      const expenseDate = new Date(expense.date);
+      if (expenseDate >= startOfWeek) {
+        totalExpenses += Number(expense.amount)
+      }
+    })
+
+    return totalExpenses
+  }
+
   const weeklyIncome = calculateWeeklyIncome();
   const weeklyBills = calculateWeeklyBills();
+  const weeklyExpenses = calculateWeeklyExpenses();
   // Income - Bills - Savings = Available to spend
   const weeklySpendingLimit = weeklyIncome - weeklyBills - savings;
+  const remainingBudget = weeklySpendingLimit - weeklyExpenses;
+
 
 
 
@@ -39,8 +61,18 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
       <h1>Budget Overview</h1>
 
       <div className="spending-limit-card">
-        <h2>${weeklySpendingLimit}</h2>
-        <p>Weekly Spending Limit</p>
+        <h2>${remainingBudget.toFixed(2)}</h2>
+        <p>Remaining This Week</p>
+      </div>
+      <div className="budget-summary">
+        <div className="summary-item">
+          <span>Weekly Budget </span>
+          <span>${weeklySpendingLimit.toFixed(2)}</span>
+        </div>
+        <div className="summary-item">
+          <span>Spent This Week </span>
+          <span>${weeklyExpenses.toFixed(2)}</span>
+        </div>
       </div>
       <hr />
 
