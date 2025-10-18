@@ -13,6 +13,13 @@
   color: #fff;
 }
 
+.navbar-left {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
 .nav-links {
   display: flex;
   gap: 30px;
@@ -30,4 +37,35 @@
 
 .nav-links li a:hover {
   color: #3498db;
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
 }
