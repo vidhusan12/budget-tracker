@@ -90,6 +90,27 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
           <span className='amount savings-amount'>${savings}</span>
         </div>
       </div>
+      <hr />
+
+      <h2>Income & Bills</h2>
+      <div className="income-list">
+        {incomes.map((income) => (
+          <div key={income.id} className='list-item'>
+            <span className='item-name'>{income.description}</span>
+            <span className='item-amount'>
+              ${income.amount} ({income.frequency})
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className="bills-list">
+        {bills.map((bill) => (
+          <div key={bill.id} className='list-item'>
+            <span className='item-name'>{bill.name}</span>
+            <span className='item-amount'>${bill.amount} (Monthly)</span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

@@ -11,6 +11,13 @@
   color: #2c3e50;
 }
 
+.dashboard h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 32px;
+  color: #2c3e50;
+}
+
 .spending-limit-card {
   text-align: center;
   padding: 40px;
@@ -103,6 +110,46 @@ hr {
   color: #2c3e50;
 }
 
+.income-list,
+.bills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.list-item {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.item-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.income-list .item-amount {
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+.bills-list .item-amount {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.list-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #f0f0f0;
+}
+
 @media (max-width: 768px) {
   .dashboard {
     padding: 20px;
@@ -111,7 +158,11 @@ hr {
   .dashboard h1 {
     font-size: 24px;
   }
-  
+
+  .dashboard h2 {
+    font-size: 24px;
+  }
+
   .spending-limit-card h2 {
     font-size: 36px;
   }
@@ -126,6 +177,4 @@ hr {
   .summary-item span:last-child {
     font-size: 20px;
   }
-
-
 }
