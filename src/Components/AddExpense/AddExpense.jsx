@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import "./AddExpense.css"
 
-const AddExpense = ({expenses, setExpenses}) => {
+const AddExpense = ({ expenses, setExpenses }) => {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
+  const [editingId, setEditingId] = useState(null);
+
+
 
 
   const today = new Date();
@@ -16,20 +19,44 @@ const AddExpense = ({expenses, setExpenses}) => {
   const yesterdayFormatted = yesterday.toISOString().split('T')[0];
 
   const handleSave = () => {
-    const newExpense = {
-      amount,
-      category,
-      date,
-      description
-    };
+    if (editingId !== null) {
+      const updatedExpenses = expenses.map((expense) => {
+        if (expense.id === editingId) {
+          return { ...expense, amount: Number(amount), category: category, date: date, description: description }
+        } else {
+          return expense
+        }
 
-    setExpenses(prevExpenses => [...prevExpenses, newExpense]);
-
+      });
+      setExpenses(updatedExpenses);
+    } else {
+      const newExpense = {
+        id: Date.now(),
+        amount,
+        category,
+        date,
+        description
+      };
+      setExpenses(prevExpenses => [...prevExpenses, newExpense]);
+    }
     // Clear form after saving
     setAmount('');
     setCategory('');
     setDate('');
     setDescription('');
+    setEditingId(null);
+  }
+
+  function handleEdit(expense) {
+    setAmount(expense.amount);
+    setCategory(expense.category);
+    setDate(expense.date);
+    setDescription(expense.description);
+    setEditingId(expense.id);
+  }
+
+  function handleDelete(id) {
+    setExpenses(expenses.filter((expense) => expense.id !== id));
   }
 
   const getExpensesByDate = () => {
@@ -101,7 +128,7 @@ const AddExpense = ({expenses, setExpenses}) => {
           />
         </div>
 
-        <button onClick={handleSave}>Save Expense</button>
+        <button onClick={handleSave}>{editingId ? "Update Expense" : "Save Expense"}</button>
       </div>
 
       <div className="right-box">
@@ -122,9 +149,16 @@ const AddExpense = ({expenses, setExpenses}) => {
               <div key={dateKey}>
                 <p>{header}</p>
                 {expensesForDate.map((expense, index) => (
-                  <div key={index}>
-                    <span>{expense.category}</span>
-                    <span>${expense.amount}</span>
+                  <div key={expense.id}>
+                    <div className="expense-info">
+                      <span>{expense.category}</span>
+                      <span>${expense.amount}</span>
+                      <span>{expense.description}</span>
+                    </div>
+                    <div className="expense-actions">
+                      <button onClick={() => handleEdit(expense)}>Edit</button>
+                      <button onClick={() => handleDelete(expense.id)}>Delete</button>
+                    </div>
                   </div>
                 ))}
               </div>
