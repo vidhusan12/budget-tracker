@@ -80,9 +80,24 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
     return totalExpenses
   }
 
+  function getMostRecentExpense() {
+    if (expenses.length === 0) {
+      return null; // No Expenses yet!
+    };
+
+    const sortedExpenses = [...expenses].sort((a, b) => {
+      return new Date(b.date) - new Date(a.date); // gets the newest transaction
+    });
+
+    // Returns the latest transcation in the array
+    return sortedExpenses[0];
+
+  }
+
   const weeklyIncome = calculateWeeklyIncome();
   const weeklyBills = calculateWeeklyBills();
   const weeklyExpenses = calculateWeeklyExpenses();
+  const recentExpense = getMostRecentExpense();
   // Income - Bills - Savings = Available to spend
   const weeklySpendingLimit = weeklyIncome - weeklyBills - savings;
   const remainingBudget = weeklySpendingLimit - weeklyExpenses;
@@ -124,6 +139,18 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
           <span className='label'>Savings</span>
           <span className='amount savings-amount'>${savings}</span>
         </div>
+        <div className="budget-item">
+          <span className='label'>Recent Transaction</span>
+          <span className='amount recent-transaction'>
+            {recentExpense ? (
+             <div style={{color: '#333'}}>
+               ${recentExpense.amount} ({recentExpense.category})
+             </div>
+            ) : (
+              'None'
+            )}
+          </span>
+        </div>
       </div>
       <hr />
 
@@ -146,7 +173,7 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
           </div>
         ))}
       </div>
-    </div>
+    </div >
   )
 }
 
