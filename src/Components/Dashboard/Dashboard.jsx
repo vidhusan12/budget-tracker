@@ -1,11 +1,69 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Dashboard.css'
 
 const Dashboard = ({ expenses, incomes, bills, savings }) => {
-  // Calculate weekly spending limit
+  const [currentWeekStart, setCurrentWeekStart] = useState(() => {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    const dayOfWeek = today.getDay();
+    const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    startOfWeek.setDate(today.getDate() + diff); // makes the week start on monday instead of sunday
+    startOfWeek.setHours(0, 0, 0, 0) // resets the time to midnight;
+
+    return startOfWeek
+  })
+
+
+  function goToPreviousWeek() {
+    const newDate = new Date(currentWeekStart);
+    newDate.setDate(newDate.getDate() - 7);
+    setCurrentWeekStart(newDate)
+  }
+
+  function goToNextWeek() {
+    const newDate = new Date(currentWeekStart);
+    newDate.setDate(newDate.getDate() + 7);
+    setCurrentWeekStart(newDate)
+  }
+
+  function getWeekDisplay() {
+    const weekNumber = Math.ceil(currentWeekStart.getDate() / 7);
+    const endOfWeek = new Date(currentWeekStart)
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    const startStr = currentWeekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const endStr = endOfWeek.toLocaleDateString('en-US', { day: 'numeric' });
+
+    return `Week ${weekNumber} (${startStr}-${endStr})`;
+  }
+
+  function isCurrentWeek() {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    const dayOfWeek = today.getDay();
+    const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    startOfWeek.setDate(today.getDate() + diff);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    return startOfWeek.getTime() === currentWeekStart.getTime();
+  }
+
+  function isOldestWeek() {
+    const today = new Date();
+    const oldestAllowed = new Date(today);
+    oldestAllowed.setDate(today.getDate() - (12 * 7)); // Go back 12 weeks
+
+    // Align to Monday (start of week)
+    const dayOfWeek = oldestAllowed.getDay();
+    const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    oldestAllowed.setDate(oldestAllowed.getDate() + diff);
+    oldestAllowed.setHours(0, 0, 0, 0);
+
+    return currentWeekStart.getTime() <= oldestAllowed.getTime();
+  }
+
   function calculateWeeklyIncome() {
     let totalWeekly = 0;
-    const today = new Date();
+    const today = currentWeekStart;
 
     incomes.forEach((income) => {
       if (!income.startDate) {
@@ -17,9 +75,7 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
       } else if (income.frequency === 'one-time') {
         // one time income
         const incomeDate = new Date(income.startDate);
-        const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay());
-        startOfWeek.setHours(0, 0, 0, 0)
+        const startOfWeek = currentWeekStart;
 
         if (incomeDate >= startOfWeek) {
           totalWeekly += income.amount
@@ -63,12 +119,7 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
 
   function calculateWeeklyExpenses() {
     let totalExpenses = 0;
-    const today = new Date();
-
-    // calculating the start of the week
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay());
-    startOfWeek.setHours(0, 0, 0, 0) // resets the time to midnight;
+    const startOfWeek = currentWeekStart;
 
     expenses.forEach((expense) => {
       const expenseDate = new Date(expense.date);
@@ -109,6 +160,11 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
   return (
     <div className="dashboard">
       <h1>Budget Overview</h1>
+      <div className="week-navigation">
+        <button onClick={goToPreviousWeek} disabled={isOldestWeek()}>← Previous Week</button>
+        <h3>{getWeekDisplay()}</h3>
+        <button onClick={goToNextWeek} disabled={isCurrentWeek()}>Next Week →</button>
+      </div>
 
       <div className="spending-limit-card">
         <h2>${remainingBudget.toFixed(2)}</h2>
@@ -143,9 +199,9 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
           <span className='label'>Recent Transaction</span>
           <span className='amount recent-transaction'>
             {recentExpense ? (
-             <div style={{color: '#333'}}>
-               ${recentExpense.amount} ({recentExpense.category})
-             </div>
+              <div style={{ color: '#333' }}>
+                ${recentExpense.amount} ({recentExpense.category})
+              </div>
             ) : (
               'None'
             )}
