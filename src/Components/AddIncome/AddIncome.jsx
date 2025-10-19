@@ -7,6 +7,9 @@ const AddIncome = ({ incomes, setIncomes }) => {
   const [frequency, setFrequency] = useState('');
   const [description, setDescription] = useState('');
   const [editingId, setEditingId] = useState(null);
+  const [startDate, setStartDate] = useState('');
+
+
 
   // Handle Function
   function handleSave() {
@@ -14,7 +17,7 @@ const AddIncome = ({ incomes, setIncomes }) => {
       // Editing existing income
       const updatedIncomes = incomes.map((income) => {
         if (income.id === editingId) {
-          return { ...income, amount: Number(amount), frequency: frequency, description: description }
+          return { ...income, amount: Number(amount), frequency: frequency, description: description, startDate: startDate }
         } else {
           return income
         }
@@ -25,7 +28,8 @@ const AddIncome = ({ incomes, setIncomes }) => {
         id: Date.now(),
         amount: Number(amount),
         frequency: frequency,
-        description: description
+        description: description,
+        startDate: startDate
       };
       setIncomes(preIncomes => [...preIncomes, newIncome]);
     }
@@ -33,6 +37,7 @@ const AddIncome = ({ incomes, setIncomes }) => {
     setAmount('')
     setFrequency('')
     setDescription('')
+    setStartDate('')
     setEditingId(null)
 
   }
@@ -41,6 +46,7 @@ const AddIncome = ({ incomes, setIncomes }) => {
     setAmount(income.amount)
     setFrequency(income.frequency)
     setDescription(income.description)
+    setStartDate(income.startDate)
     setEditingId(income.id)
   }
 
@@ -71,6 +77,7 @@ const AddIncome = ({ incomes, setIncomes }) => {
             <option value="weekly">Weekly</option>
             <option value="fortnightly">Fortnightly</option>
             <option value="monthly">Monthly</option>
+            <option value="one-time">One-Time</option>
           </select>
         </div>
 
@@ -81,6 +88,16 @@ const AddIncome = ({ incomes, setIncomes }) => {
             placeholder='e.g Main Job, Side Gig'
             value={description}
             onChange={(e) => setDescription(e.target.value)} />
+        </div>
+        <div className="date">
+          <h3>Start Date</h3>
+          <input
+            type="date"
+            placeholder='When do you get paid'
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <p style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>When did/will you receive your first payment?</p>
         </div>
         <button onClick={handleSave}>
           {editingId ? 'Update Income' : 'Save Income'}

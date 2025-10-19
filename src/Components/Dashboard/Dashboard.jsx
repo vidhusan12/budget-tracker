@@ -5,17 +5,52 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
   // Calculate weekly spending limit
   function calculateWeeklyIncome() {
     let totalWeekly = 0;
+    const today = new Date();
 
     incomes.forEach((income) => {
+      if (!income.startDate) {
+        return;
+      }
+      // Weekly income
       if (income.frequency === 'weekly') {
-        totalWeekly += income.amount
+        totalWeekly += income.amount;
+      } else if (income.frequency === 'one-time') {
+        // one time income
+        const incomeDate = new Date(income.startDate);
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        startOfWeek.setHours(0, 0, 0, 0)
+
+        if (incomeDate >= startOfWeek) {
+          totalWeekly += income.amount
+        }
+
       } else if (income.frequency === 'fortnightly') {
-        totalWeekly += income.amount / 2
+        // fortnightly income
+        const startDate = new Date(income.startDate);
+        // Calculate milliseconds between today and startDate
+        const milliseconds = today - startDate;
+        // Convert milliseconds to days
+        const convertToDays = Math.floor(milliseconds / (1000 * 60 * 60 * 24))
+        // Convert days to weeks
+        const weeksPassed = Math.floor(convertToDays / 7);
+        // Check if it's an even week (pay week)
+        if (weeksPassed % 2 === 0) {
+          totalWeekly += income.amount
+        }
       } else if (income.frequency === 'monthly') {
-        totalWeekly += income.amount / 4
+        const startDate = new Date(income.startDate);
+        const startDay = startDate.getDate(); // gets day of month (1-31)
+        const todayDay = today.getDate();
+
+        if (Math.abs(todayDay - startDay) < 7) {
+          totalWeekly += income.amount;
+        }
       }
     })
+
     return totalWeekly
+
   }
 
   function calculateWeeklyBills() {
