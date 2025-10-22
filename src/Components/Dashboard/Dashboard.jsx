@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 import './Dashboard.css'
+import { GiMoneyStack } from 'react-icons/gi';
+import { BiTrendingDown } from 'react-icons/bi';
+import { GiCash } from 'react-icons/gi';
+import { FaArrowTrendUp } from 'react-icons/fa6';
+import { FaSackDollar } from 'react-icons/fa6';
 
 const Dashboard = ({ expenses, incomes, bills, savings }) => {
   const [currentWeekStart, setCurrentWeekStart] = useState(() => {
@@ -161,46 +166,75 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
     <div className="dashboard">
       <h1>Budget Overview</h1>
       <div className="week-navigation">
-        <button onClick={goToPreviousWeek} disabled={isOldestWeek()}>← Previous Week</button>
+        <button onClick={goToPreviousWeek} disabled={isOldestWeek()}>←</button>
         <h3>{getWeekDisplay()}</h3>
-        <button onClick={goToNextWeek} disabled={isCurrentWeek()}>Next Week →</button>
+        <button onClick={goToNextWeek} disabled={isCurrentWeek()}>→</button>
       </div>
 
       <div className="spending-limit-card">
-        <h2>${remainingBudget.toFixed(2)}</h2>
         <p>Remaining This Week</p>
+        <h2>${remainingBudget.toFixed(2)}</h2>
       </div>
       <div className="budget-summary">
-        <div className="summary-item">
-          <span>Weekly Budget </span>
-          <span>${weeklySpendingLimit.toFixed(2)}</span>
+        <div className="summary-card">
+          <div className="summary-content">
+            <span className="summary-label">Weekly Budget</span>
+            <span className="summary-amount">${weeklySpendingLimit.toFixed(2)}</span>
+          </div>
+          <div className="summary-icon">
+            <GiMoneyStack size={40} color='#27ae60' />
+          </div>
         </div>
-        <div className="summary-item">
-          <span>Spent This Week </span>
-          <span>${weeklyExpenses.toFixed(2)}</span>
+        <div className="summary-card">
+          <div className="summary-content">
+            <span className="summary-label">Spent This Week</span>
+            <span className="summary-spent">${weeklyExpenses.toFixed(2)}</span>
+          </div>
+          <div className="summary-icon">
+            < BiTrendingDown size={40} color='red' />
+          </div>
         </div>
       </div>
-      <hr />
+
 
       <div className="budget-grid">
+        {/* Income */}
         <div className="budget-item">
-          <span className='label'>Income</span>
-          <span className='amount income-amount'>${weeklyIncome.toFixed(2)}</span>
+          <div className="budget-header">
+            <FaArrowTrendUp size={20} color='green' />
+            <span className='budget-label'>Income</span>
+          </div>
+          <span className='budget-amount income-amount'>${weeklyIncome.toFixed(2)}</span>
         </div>
+
+        {/* Bills */}
         <div className="budget-item">
-          <span className='label'>Bills</span>
-          <span className='amount bills-amount'>${weeklyBills.toFixed(2)}</span>
+          <div className="budget-header">
+            <GiCash size={20} color='#e74c3c' />
+            <span className='budget-label'>Bills</span>
+          </div>
+          <span className='budget-amount bills-amount'>${weeklyBills.toFixed(2)}</span>
         </div>
+
+        {/* Savings */}
         <div className="budget-item">
-          <span className='label'>Savings</span>
-          <span className='amount savings-amount'>${savings}</span>
+          <div className="budget-header">
+            <FaSackDollar size={20} color='blue' />
+            <span className='budget-label'>Savings</span>
+          </div>
+          <span className='budget-amount savings-amount'>${savings}</span>
         </div>
+
+        {/* Recent Transaction */}
         <div className="budget-item">
-          <span className='label'>Recent Transaction</span>
-          <span className='amount recent-transaction'>
+          <div className="budget-header">
+            <span className='budget-label'>Recent Transaction</span>
+          </div>
+          <span className='budget-amount recent-transaction'>
             {recentExpense ? (
-              <div style={{ color: '#333' }}>
-                ${recentExpense.amount} ({recentExpense.category})
+              <div>
+                <p>{recentExpense.category}</p>
+                <p style={{ color: 'red' }}>${recentExpense.amount}</p>
               </div>
             ) : (
               'None'
@@ -208,26 +242,37 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
           </span>
         </div>
       </div>
-      <hr />
+      <div className='income-bill-container'>
 
-      <h2>Income & Bills</h2>
-      <div className="income-list">
-        {incomes.map((income) => (
-          <div key={income.id} className='list-item'>
-            <span className='item-name'>{income.description}</span>
-            <span className='item-amount'>
-              ${income.amount} ({income.frequency})
-            </span>
+        <div className="income-sources">
+          <h3>Income Sources</h3>
+          <div className="dashboard-income-list">
+            {incomes.map((income) => (
+              <div key={income.id} className='income-bill-item'>
+                <span className='income-bill-name'>{income.description}</span>
+                <div className="income-bill-details">
+                  <span className='income-bill-frequency'>{income.frequency}</span>
+                  <span className='income-bill-amount'>${income.amount}</span>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="bills-list">
-        {bills.map((bill) => (
-          <div key={bill.id} className='list-item'>
-            <span className='item-name'>{bill.name}</span>
-            <span className='item-amount'>${bill.amount} (Monthly)</span>
+        </div>
+
+        <div className="bills-sources">
+          <h3>Bills</h3>
+          <div className="dashboard-bills-list">
+            {bills.map((bill) => (
+              <div key={bill.id} className='income-bill-item'>
+                <span className='income-bill-name'>{bill.name}</span>
+                <div className="income-bill-details">
+                  <span className='income-bill-frequency'>Monthly</span>
+                  <span className='income-bill-expense'>${bill.amount}</span>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div >
   )
