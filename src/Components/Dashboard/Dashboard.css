@@ -285,3 +285,23 @@
     flex: 1;
   }
 }
+
+/* Small Mobile - 480px and below */
+@media (max-width: 480px) {
+  .dashboard {
+    padding: 15px;
+  }
+  
+  .budget-grid {
+    gap: 10px;  /* Smaller gap */
+  }
+  
+  .budget-item {
+    padding: 15px;  /* Much smaller padding */
+    gap: 10px;
+  }
+  
+  .budget-header {
+    margin-bottom: 8px;
+  }
+}
