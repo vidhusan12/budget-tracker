@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import './AddIncome.css'
+import { BsPencil } from 'react-icons/bs';
+import { MdOutlineDelete } from 'react-icons/md';
 
 const AddIncome = ({ incomes, setIncomes }) => {
 
@@ -109,12 +111,16 @@ const AddIncome = ({ incomes, setIncomes }) => {
           {incomes.map((income) => (
             <div key={income.id} className='income-item'>
               <div className="income-info">
-                <p><strong>{income.description}</strong></p>
-                <p>${income.amount} ({income.frequency})</p>
+                <span className="income-description">{income.description}</span>
+                <span className="income-amount">${income.amount} • {income.frequency}</span>
               </div>
               <div className="income-actions">
-                <button onClick={() => handleEdit(income)}>Edit</button>
-                <button onClick={() => handleDelete(income.id)}>Delete</button>
+                <button className="edit-btn" onClick={() => handleEdit(income)}>
+                  <BsPencil size={16} />
+                </button>
+                <button className="delete-btn" onClick={() => handleDelete(income.id)}>
+                  <MdOutlineDelete size={16} />
+                </button>
               </div>
             </div>
           ))}

@@ -6,6 +6,9 @@
   min-height: 100vh;
   padding: 40px 20px;
 }
+* {
+  box-sizing: border-box;
+}
 
 .left-box,
 .right-box {
@@ -24,9 +27,9 @@
 }
 
 .left-box input,
-.left box select {
+.left-box select {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -48,79 +51,92 @@
   background-color: #0056b3;
 }
 
+/* RIGHT BOX CSS */
+
 .right-box {
   overflow-y: auto;
   max-height: 600px;
 }
 
-.expenses-list > div {
-  margin-bottom: 24px;
-}
+/* Expense List */
 
-.expenses-list > div > p {
-  font-weight: 600;
-  font-size: 16px;
-  color: #333;
-  margin: 0 0 8px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.expenses-list > div > div {
+.expenses-list {
   display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.expenses-list > div > div:last-child {
-  border-bottom: none;
-}
-
-.expenses-list > div > div span:first-child {
-  color: #666;
-  text-transform: capitalize;
-}
-
-.expenses-list > div > div span:last-child {
-  font-weight: 600;
-  color: #333;
-}
-
-.expense-info {
+.expense-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 5px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
 }
+
+.expense-info {
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+  gap: 10px;
+}
+
+.expense-category {
+  font-weight: 600;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.expense-amount {
+  letter-spacing: 1px;
+  font-weight: 400;
+  color: #dc3545;
+}
+
 
 .expense-actions {
   display: flex;
   gap: 10px;
 }
-
 .expense-actions button {
-  padding: 8px 16px;
-  border-radius: 4px;
   border: none;
+  background-color: transparent;
+  padding: 8px;
   cursor: pointer;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 
-.expense-actions button:first-child {
-  background-color: #3498db;
-  color: white;
+/* Edit button - Blue */
+.edit-btn svg {
+  color: #007bff;
 }
 
-.expense-actions button:last-child {
-  background-color: #e74c3c;
-  color: white;
+.edit-btn:hover {
+  background-color: #e7f3ff;
 }
 
-.expense-actions button:hover {
-  opacity: 0.8;
+.edit-btn:hover svg {
+  color: #0056b3;
 }
 
+/* Delete button - Red */
+.delete-btn svg {
+  color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #ffe5e7;
+}
+
+.delete-btn:hover svg {
+  color: #a71d2a;
+}
 
 @media (max-width: 768px) {
   .container {

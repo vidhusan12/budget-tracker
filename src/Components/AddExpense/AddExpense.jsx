@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./AddExpense.css"
+import { BsPencil } from 'react-icons/bs';
+import { MdOutlineDelete } from 'react-icons/md';
 
 const AddExpense = ({ expenses, setExpenses }) => {
   const [amount, setAmount] = useState('');
@@ -147,17 +149,20 @@ const AddExpense = ({ expenses, setExpenses }) => {
 
             return (
               <div key={dateKey}>
-                <p>{header}</p>
+                <p className="date-header">{header}</p>
                 {expensesForDate.map((expense, index) => (
-                  <div key={expense.id}>
+                  <div key={expense.id} className="expense-item"> {/* ← Add className */}
                     <div className="expense-info">
-                      <span>{expense.category}</span>
-                      <span>${expense.amount}</span>
-                      <span>{expense.description}</span>
+                      <span className="expense-category">{expense.category}</span>
+                      <span className="expense-amount">${expense.amount}</span>
                     </div>
                     <div className="expense-actions">
-                      <button onClick={() => handleEdit(expense)}>Edit</button>
-                      <button onClick={() => handleDelete(expense.id)}>Delete</button>
+                      <button className="edit-btn" onClick={() => handleEdit(expense)}>
+                        <BsPencil size={14} />
+                      </button>
+                      <button className="delete-btn" onClick={() => handleDelete(expense.id)}>
+                        <MdOutlineDelete size={16} />
+                      </button>
                     </div>
                   </div>
                 ))}

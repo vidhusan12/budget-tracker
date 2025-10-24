@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
   justify-content: center;
@@ -53,73 +57,104 @@
   max-height: 600px;
 }
 
-.incomes-list > div {
-  margin-bottom: 24px;
-}
-
-.incomes-list > div > p {
-  font-weight: 600;
-  font-size: 16px;
-  color: #333;
-  margin: 0 0 8px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.incomes-list > div > div {
+/* Incomes list */
+.incomes-list {
   display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.incomes-list > div > div:last-child {
-  border-bottom: none;
-}
-
-.incomes-list > div > div span:first-child {
-  color: #666;
-  text-transform: capitalize;
-}
-
-.incomes-list > div > div span:last-child {
-  font-weight: 600;
-  color: #333;
-}
-
+/* Individual income item */
 .income-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
 }
 
-.income-item p {
-  margin: 5px 0;
+/* Income info (left side) */
+.income-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
+.income-description {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.income-amount {
+  font-size: 14px;
+  font-weight: 500;
+  color: #27ae60;
+}
+
+/* Income actions (right side - buttons) */
 .income-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .income-actions button {
-  padding: 8px 16px;
-  border-radius: 4px;
   border: none;
+  background-color: transparent;
+  padding: 8px;
   cursor: pointer;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
 }
 
-.income-actions button:first-child {
-  background-color: #3498db;
-  color: white;
-}
-.income-actions button:last-child {
-  background-color: #e74c3c;
-  color: white;
+/* Edit button */
+.edit-btn svg {
+  color: #007bff;
 }
 
-.income-actions button:hover {
-  opacity: 0.8;
+.edit-btn:hover {
+  background-color: #e7f3ff;
+}
+
+.edit-btn:hover svg {
+  color: #0056b3;
+}
+
+/* Delete button */
+.delete-btn svg {
+  color: #dc3545;
+}
+
+.delete-btn:hover {
+  background-color: #ffe5e7;
+}
+
+.delete-btn:hover svg {
+  color: #a71d2a;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 15px;
+  }
+
+  .left-box,
+  .right-box {
+    max-width: 100%;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .right-box {
+    max-height: 400px;
+  }
 }

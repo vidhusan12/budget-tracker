@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import './AddBills.css'
+import { BsPencil } from 'react-icons/bs';
+import { MdOutlineDelete } from 'react-icons/md';
 
 const AddBills = ({ bills, setBills }) => {
 
@@ -69,16 +71,18 @@ const AddBills = ({ bills, setBills }) => {
       <div className="right-box">
         <div className="bills-list">
           {bills.map((bill) => (
-            <div key={bill.id}>
-              <div className="bill-item">
-                <div className="bill-info">
-                  <h4>{bill.name}</h4>
-                  <p>${bill.amount}/month (${(bill.amount / 4).toFixed(2)}/week)</p>
-                </div>
-                <div className="bill-actions">
-                  <button onClick={() => handleEdit(bill)}>Edit</button>
-                  <button onClick={() => handleDelete(bill.id)}>Delete</button>
-                </div>
+            <div key={bill.id} className='bill-item'>
+              <div className="bill-info">
+                <span className="bill-name">{bill.name}</span>
+                <span className="bill-amount">${bill.amount} • Monthly</span>
+              </div>
+              <div className="bill-actions">
+                <button className="edit-btn" onClick={() => handleEdit(bill)}>
+                  <BsPencil size={16} />
+                </button>
+                <button className="delete-btn" onClick={() => handleDelete(bill.id)}>
+                  <MdOutlineDelete size={16} />
+                </button>
               </div>
             </div>
           ))}

@@ -1,84 +1,149 @@
+* {
+  box-sizing: border-box;
+}
+
 .savings-container {
-  max-width: 600px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background-color: #f5f5f5;
+}
+
+.savings-card {
+  width: 100%;
+  max-width: 500px;
   padding: 40px;
-  text-align: center;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.savings-container h1 {
-  font-size: 32px;
-  color: #2c3e50;
-  margin-bottom: 10px;
-
+/* Header with icon */
+.savings-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
 }
 
-.savings-container > p {
-  font-size: 16px;
+.savings-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.savings-header p {
+  margin: 0;
+  font-size: 14px;
   color: #666;
-  margin-bottom: 40px;
 }
 
+/* Input section */
 .savings-input {
   margin-bottom: 30px;
-
 }
 
 .savings-input label {
   display: block;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
   color: #333;
 }
 
 .savings-input input {
   width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
 }
 
 .savings-input input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #f39c12;
+  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
 }
 
-.savings-container button {
+.savings-input button {
   width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #27ae60;
+  padding: 14px;
+  background-color: #f39c12;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  margin-bottom: 40px;
-
+  transition: background-color 0.2s;
 }
 
-.savings-container button:hover {
-  background-color: #229954;
+.savings-input button:hover {
+  background-color: #e67e22;
 }
 
+/* Current savings display */
 .current-savings {
-  padding: 30px;
-  background-color: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #fff9f0;
+  border: 2px solid #f39c12;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .current-savings h3 {
-  font-size: 20px;
-  color: #555;
-  margin-bottom: 10px;
+  margin: 0 0 15px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.current-savings p {
-  font-size: 36px;
-  font-weight: bold;
-  color: #27ae60;
-  margin: 0;
+.savings-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.savings-amount {
+  font-size: 48px;
+  font-weight: 700;
+  color: #f39c12;
+}
+
+.savings-frequency {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .savings-container {
+    padding: 20px 15px;
+  }
+
+  .savings-card {
+    padding: 30px 20px;
+  }
+
+  .savings-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .savings-header h1 {
+    font-size: 20px;
+  }
+
+  .savings-amount {
+    font-size: 36px;
+  }
 }
