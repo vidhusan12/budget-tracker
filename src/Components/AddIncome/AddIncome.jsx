@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import './AddIncome.css'
 import { BsPencil } from 'react-icons/bs';
 import { MdOutlineDelete } from 'react-icons/md';
+import { incomeAPI } from '../../services/api';
+import { useEffect } from 'react';
 
 const AddIncome = ({ incomes, setIncomes }) => {
 
@@ -11,49 +13,82 @@ const AddIncome = ({ incomes, setIncomes }) => {
   const [editingId, setEditingId] = useState(null);
   const [startDate, setStartDate] = useState('');
 
+  // Load incomes from backend when component mounts
+  useEffect(() => {
+    const fetchIncomes = async () => {
+      try {
+        const response = await incomeAPI.getAll();
+        setIncomes(response.data);
+      } catch (error) {
+        console.error('Error fetching incomes:', error)
+      }
+    };
+    fetchIncomes();
+  }, [setIncomes]);
+
 
 
   // Handle Function
-  function handleSave() {
-    if (editingId !== null) {
-      // Editing existing income
-      const updatedIncomes = incomes.map((income) => {
-        if (income.id === editingId) {
-          return { ...income, amount: Number(amount), frequency: frequency, description: description, startDate: startDate }
-        } else {
-          return income
-        }
-      });
-      setIncomes(updatedIncomes)
-    } else {
-      const newIncome = {
-        id: Date.now(),
-        amount: Number(amount),
-        frequency: frequency,
-        description: description,
-        startDate: startDate
-      };
-      setIncomes(preIncomes => [...preIncomes, newIncome]);
+  async function handleSave() {
+    if (!amount || !frequency || !description) {
+      alert('Please fill in all required fields');
+      return;
     }
-    // Clear form
-    setAmount('')
-    setFrequency('')
-    setDescription('')
-    setStartDate('')
-    setEditingId(null)
 
+    try {
+      const incomeData = {
+        amount: parseFloat(amount),
+        description,
+        frequency,
+        startDate
+      };
+
+      if (editingId !== null) {
+        // Update existing income
+        const response = await incomeAPI.update(editingId, incomeData)
+        setIncomes(incomes.map((income) =>
+          income._id === editingId ? response.data : income
+        ));
+        alert('Income updated successfully!!!');
+      } else {
+        // Create new income
+        const response = await incomeAPI.create(incomeData);
+        setIncomes([response.data, ...incomes]);
+        alert('Income added successfully!!!');
+      }
+
+      // Clear form
+      setAmount('');
+      setFrequency('');
+      setDescription('');
+      setStartDate('');
+      setEditingId(null);
+
+    } catch (error) {
+      console.error('Error saving income:', error);
+      alert('Failed to save income. Please try again.')
+    }
   }
 
   function handleEdit(income) {
     setAmount(income.amount)
     setFrequency(income.frequency)
     setDescription(income.description)
-    setStartDate(income.startDate)
-    setEditingId(income.id)
+    setStartDate(income.startDate || '')
+    setEditingId(income._id)
   }
 
-  function handleDelete(id) {
-    setIncomes(incomes.filter((income) => income.id !== id))
+  async function handleDelete(id) {
+    if (window.confirm('Are you sure you want to delete this income?')) {
+      try {
+        await incomeAPI.delete(id);
+        setIncomes(incomes.filter((income) => income._id !== id));
+        alert('Income deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting income:', error);
+        alert('Failed to delete income. Please try again.');
+      }
+    }
   }
 
   return (
@@ -109,7 +144,7 @@ const AddIncome = ({ incomes, setIncomes }) => {
       <div className="right-box">
         <div className="incomes-list">
           {incomes.map((income) => (
-            <div key={income.id} className='income-item'>
+            <div key={income._id} className='income-item'>
               <div className="income-info">
                 <span className="income-description">{income.description}</span>
                 <span className="income-amount">${income.amount} • {income.frequency}</span>
@@ -118,7 +153,7 @@ const AddIncome = ({ incomes, setIncomes }) => {
                 <button className="edit-btn" onClick={() => handleEdit(income)}>
                   <BsPencil size={16} />
                 </button>
-                <button className="delete-btn" onClick={() => handleDelete(income.id)}>
+                <button className="delete-btn" onClick={() => handleDelete(income._id)}>
                   <MdOutlineDelete size={16} />
                 </button>
               </div>

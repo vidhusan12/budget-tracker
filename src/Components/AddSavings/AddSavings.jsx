@@ -1,12 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './AddSavings.css'
 import { MdOutlineSavings } from 'react-icons/md';
+import { savingsAPI } from '../../services/api';
+
 const AddSavings = ({ savings, setSavings }) => {
   const [amount, setAmount] = useState('')
 
-  function handleSave() {
-    setSavings(Number(amount));
-    setAmount('');
+  // Load savings from backend when component mounts
+  useEffect(() => {
+    const fetchSavings = async () => {
+      try {
+        const response = await savingsAPI.get();
+        setSavings(response.data.amount)
+      } catch (error) {
+        console.error('Error fetching savings:', error)
+      }
+    };
+    fetchSavings();
+  }, [setSavings]);
+
+  async function handleSave() {
+    if (!amount || amount <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+
+    try {
+      const response = await savingsAPI.update(parseFloat(amount));
+      setSavings(response.data.amount);
+      setAmount('');
+      alert('Savings goal updated successfully!');
+    } catch (error) {
+      console.error('Error updating savings:', error);
+      alert('Failed to update savings goal. Please try again.');
+    }
   }
   return (
     <div className="savings-container">

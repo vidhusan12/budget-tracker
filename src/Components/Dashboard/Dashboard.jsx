@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Dashboard.css'
 import { GiMoneyStack } from 'react-icons/gi';
 import { BiTrendingDown } from 'react-icons/bi';
 import { GiCash } from 'react-icons/gi';
 import { FaArrowTrendUp } from 'react-icons/fa6';
 import { FaSackDollar } from 'react-icons/fa6';
+import { expenseAPI, incomeAPI, billAPI, savingsAPI } from '../../services/api';
 
-const Dashboard = ({ expenses, incomes, bills, savings }) => {
+const Dashboard = ({ expenses, incomes, bills, savings, setExpenses, setIncomes, setBills, setSavings }) => {
   const [currentWeekStart, setCurrentWeekStart] = useState(() => {
     const today = new Date();
     const startOfWeek = new Date(today);
@@ -14,9 +15,30 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
     const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
     startOfWeek.setDate(today.getDate() + diff); // makes the week start on monday instead of sunday
     startOfWeek.setHours(0, 0, 0, 0) // resets the time to midnight;
-
     return startOfWeek
   })
+
+  // Load all data from backend when component mounts
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const [expensesRes, incomesRes, billsRes, savingsRes] = await Promise.all([
+          expenseAPI.getAll(),
+          incomeAPI.getAll(),
+          billAPI.getAll(),
+          savingsAPI.get()
+        ]);
+
+        setExpenses(expensesRes.data);
+        setIncomes(incomesRes.data);
+        setBills(billsRes.data);
+        setSavings(savingsRes.data.amount);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      }
+    };
+    fetchAllData();
+  }, [setExpenses, setIncomes, setBills, setSavings]);
 
 
   function goToPreviousWeek() {
@@ -248,7 +270,7 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
           <h3>Income Sources</h3>
           <div className="dashboard-income-list">
             {incomes.map((income) => (
-              <div key={income.id} className='income-bill-item'>
+              <div key={income._id} className='income-bill-item'>
                 <span className='income-bill-name'>{income.description}</span>
                 <div className="income-bill-details">
                   <span className='income-bill-frequency'>{income.frequency}</span>
@@ -263,7 +285,7 @@ const Dashboard = ({ expenses, incomes, bills, savings }) => {
           <h3>Bills</h3>
           <div className="dashboard-bills-list">
             {bills.map((bill) => (
-              <div key={bill.id} className='income-bill-item'>
+              <div key={bill._id} className='income-bill-item'>
                 <span className='income-bill-name'>{bill.name}</span>
                 <div className="income-bill-details">
                   <span className='income-bill-frequency'>Monthly</span>
