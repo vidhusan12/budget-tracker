@@ -19,13 +19,15 @@ mongoose.connect(process.env.MONGODB_URI)
 const expenseRoutes = require('./routes/expenses');
 const incomeRoutes = require('./routes/incomes');
 const billRoutes = require('./routes/bills');
-const savingsRoutes = require('./routes/savings');  // ← Add this
+const savingsRoutes = require('./routes/savings'); 
+const authRoutes = require('./routes/auth'); 
 
 // Use routes
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/incomes', incomeRoutes);
 app.use('/api/bills', billRoutes);
-app.use('/api/savings', savingsRoutes);  // ← Add this
+app.use('/api/savings', savingsRoutes);  
+app.use('/api/auth', authRoutes);
 
 // Test route
 app.get('/', (req, res) => {
