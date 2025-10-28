@@ -17,6 +17,11 @@ const incomeSchema = new mongoose.Schema({
   startDate: {
     type: Date,
     required: false
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true

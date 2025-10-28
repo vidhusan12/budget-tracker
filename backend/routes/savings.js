@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Savings = require('../models/Saving');
+const authMiddleware = require('../middleware/auth');
 
 // GET savings (returns single document)
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
-    let savings = await Savings.findOne();
+    let savings = await Savings.findOne({ userId: req.user.id });
 
     // If no savings document exists, create one with 0
     if (!savings) {
-      savings = new Savings({ amount: 0 });
+      savings = new Savings({ amount: 0, userId: req.user.id });
       await savings.save();
     }
 
@@ -20,20 +21,20 @@ router.get('/', async (req, res) => {
 });
 
 // PUT - Update savings amount
-router.put('/', async (req, res) => {
+router.put('/', authMiddleware, async (req, res) => {
   try {
-    let savings = await Savings.findOne();
+    const saving = await Savings.findOne({ userId: req.user.id }); 
 
-    if (!savings) {
-      // Create if doesn't exist
-      savings = new Savings({ amount: req.body.amount });
-    } else {
-      // Update existing
-      savings.amount = req.body.amount;
+    if (!saving) {
+      return res.status(404).json({ message: 'Saving not found' });
     }
 
-    await savings.save();
-    res.json(savings);
+
+    saving.amount = req.body.amount;
+
+    await saving.save();
+
+    res.json(saving);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

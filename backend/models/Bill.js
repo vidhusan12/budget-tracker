@@ -12,6 +12,11 @@ const billSchema = new mongoose.Schema({
   dueDate: {
     type: String,
     required: false
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true

@@ -17,6 +17,11 @@ const expenseSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now // If no date provided, use current date
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt
