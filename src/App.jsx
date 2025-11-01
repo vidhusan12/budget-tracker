@@ -7,6 +7,8 @@ import Navbar from './Components/Navbar/Navbar';
 import AddIncome from './Components/AddIncome/AddIncome';
 import AddBills from './Components/AddBills/AddBills';
 import AddSavings from './Components/AddSavings/AddSavings';
+import Login from './Components/Login/Login';
+import Signup from './Components/Signup/Signup';
 
 function App() {
   // Simple state - no localStorage!
@@ -20,6 +22,8 @@ function App() {
     <>
       <Navbar />
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route
           path="/"
           element={
