@@ -1,25 +1,22 @@
 import React from 'react';
 import './Home.css';
+import { FaMoneyBillWave, FaChartLine, FaFileInvoiceDollar, FaPiggyBank, FaShieldAlt, FaArrowRight } from 'react-icons/fa';
 
 const Home = () => {
   return (
     <div className="home-container">
       {/* Hero Section */}
       <section className="hero-section">
-        <div className="hero-content">
-          <h1 className="hero-title">Welcome to Budget Tracker</h1>
+        <div className="hero-card">
+          <h1>Take Control of Your Finances</h1>
           <p className="hero-subtitle">
-            Take control of your finances with our easy-to-use budget tracking app
+            Track expenses, manage income, and achieve your savings goals - all in one place.
           </p>
-          <p className="hero-description">
-            Track expenses, manage income, monitor bills, and achieve your savings goals - all in one place.
-          </p>
-
           <div className="hero-buttons">
-            <a href="/signup" className="btn btn-primary">
-              Get Started
+            <a href="/signup" className="btn-primary">
+              Get Started <FaArrowRight />
             </a>
-            <a href="/login" className="btn btn-secondary">
+            <a href="/login" className="btn-secondary">
               Login
             </a>
           </div>
@@ -28,59 +25,75 @@ const Home = () => {
 
       {/* Features Section */}
       <section className="features-section">
-        <h2 className="features-title">Why Choose Budget Tracker?</h2>
+        <h2>Everything You Need to Manage Your Money</h2>
 
         <div className="features-grid">
           <div className="feature-card">
-            <div className="feature-icon">💰</div>
+            <div className="feature-icon expense">
+              <FaMoneyBillWave size={32} />
+            </div>
             <h3>Track Expenses</h3>
-            <p>Monitor your spending habits and categorize expenses effortlessly</p>
+            <p>Monitor your spending habits and categorize expenses by week</p>
           </div>
 
           <div className="feature-card">
-            <div className="feature-icon">💵</div>
+            <div className="feature-icon income">
+              <FaChartLine size={32} />
+            </div>
             <h3>Manage Income</h3>
-            <p>Record all your income sources and track your earnings over time</p>
+            <p>Record weekly, fortnightly, and monthly income sources</p>
           </div>
 
           <div className="feature-card">
-            <div className="feature-icon">📋</div>
-            <h3>Bills Reminder</h3>
-            <p>Never miss a payment with our bills tracking and reminder system</p>
+            <div className="feature-icon bills">
+              <FaFileInvoiceDollar size={32} />
+            </div>
+            <h3>Bills Tracker</h3>
+            <p>Never miss a payment with automatic bill tracking</p>
           </div>
 
           <div className="feature-card">
-            <div className="feature-icon">🎯</div>
+            <div className="feature-icon savings">
+              <FaPiggyBank size={32} />
+            </div>
             <h3>Savings Goals</h3>
-            <p>Set and achieve your financial goals with our savings tracker</p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">📊</div>
-            <h3>Visual Reports</h3>
-            <p>Get insights with beautiful charts and detailed financial reports</p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon">🔒</div>
-            <h3>Secure & Private</h3>
-            <p>Your financial data is encrypted and protected with industry-standard security</p>
+            <p>Set and achieve your financial goals with ease</p>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
+      {/* Stats Section */}
+      <section className="stats-section">
+        <div className="stats-grid">
+          <div className="stat-card">
+            <h3>Simple</h3>
+            <p>Easy to use interface designed for everyone</p>
+          </div>
+          <div className="stat-card">
+            <h3>Secure</h3>
+            <p>Your data is encrypted and protected</p>
+          </div>
+          <div className="stat-card">
+            <h3>Free</h3>
+            <p>100% free to use, no hidden fees</p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
       <section className="cta-section">
-        <h2>Ready to take control of your finances?</h2>
-        <p>Join thousands of users who are already managing their money smarter</p>
-        <a href="/signup" className="btn btn-large">
-          Start Tracking Today - It's Free!
-        </a>
+        <div className="cta-card">
+          <h2>Ready to Start?</h2>
+          <p>Join thousands of users managing their finances smarter</p>
+          <a href="/signup" className="btn-cta">
+            Create Free Account
+          </a>
+        </div>
       </section>
 
       {/* Footer */}
       <footer className="home-footer">
-        <p>&copy; 2024 Budget Tracker. All rights reserved.</p>
+        <p>&copy; 2025 Budget Tracker. All rights reserved.</p>
       </footer>
     </div>
   );
