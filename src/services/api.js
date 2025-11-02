@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = import.meta.env.PROD
+  ? 'https://budget-tracker-mmqt.onrender.com/api'
+  : 'http://localhost:5001/api';
 
 // Create axios instance with base URL
 const apiClient = axios.create({
