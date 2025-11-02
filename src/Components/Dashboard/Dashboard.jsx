@@ -18,6 +18,8 @@ const Dashboard = ({ expenses, incomes, bills, savings, setExpenses, setIncomes,
     return startOfWeek
   })
 
+
+
   // Load all data from backend when component mounts
   useEffect(() => {
     const fetchAllData = async () => {
@@ -91,11 +93,12 @@ const Dashboard = ({ expenses, incomes, bills, savings, setExpenses, setIncomes,
   function calculateWeeklyIncome() {
     let totalWeekly = 0;
     const today = currentWeekStart;
+    const endOfWeek = new Date(currentWeekStart)
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+
 
     incomes.forEach((income) => {
-      if (!income.startDate) {
-        return;
-      }
+
       // Weekly income
       if (income.frequency === 'weekly') {
         totalWeekly += income.amount;
@@ -104,23 +107,28 @@ const Dashboard = ({ expenses, incomes, bills, savings, setExpenses, setIncomes,
         const incomeDate = new Date(income.startDate);
         const startOfWeek = currentWeekStart;
 
-        if (incomeDate >= startOfWeek) {
+        if (incomeDate >= startOfWeek && incomeDate <= endOfWeek) {
           totalWeekly += income.amount
         }
 
       } else if (income.frequency === 'fortnightly') {
-        // fortnightly income
+        if (!income.startDate) return;
+
         const startDate = new Date(income.startDate);
-        // Calculate milliseconds between today and startDate
-        const milliseconds = today - startDate;
-        // Convert milliseconds to days
+        startDate.setHours(0, 0, 0, 0);
+
+        const todayMidnight = new Date(today);
+        todayMidnight.setHours(0, 0, 0, 0);
+
+        const milliseconds = todayMidnight - startDate;
         const convertToDays = Math.floor(milliseconds / (1000 * 60 * 60 * 24))
-        // Convert days to weeks
         const weeksPassed = Math.floor(convertToDays / 7);
-        // Check if it's an even week (pay week)
+
+
         if (weeksPassed % 2 === 0) {
           totalWeekly += income.amount
         }
+
       } else if (income.frequency === 'monthly') {
         const startDate = new Date(income.startDate);
         const startDay = startDate.getDate(); // gets day of month (1-31)
@@ -147,14 +155,17 @@ const Dashboard = ({ expenses, incomes, bills, savings, setExpenses, setIncomes,
   function calculateWeeklyExpenses() {
     let totalExpenses = 0;
     const startOfWeek = currentWeekStart;
+    const endOfWeek = new Date(currentWeekStart);
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
 
     expenses.forEach((expense) => {
       const expenseDate = new Date(expense.date);
-      if (expenseDate >= startOfWeek) {
+
+      if (expenseDate >= startOfWeek && expenseDate <= endOfWeek) {
         totalExpenses += Number(expense.amount)
       }
     })
-
     return totalExpenses
   }
 
@@ -171,6 +182,7 @@ const Dashboard = ({ expenses, incomes, bills, savings, setExpenses, setIncomes,
     return sortedExpenses[0];
 
   }
+
 
   const weeklyIncome = calculateWeeklyIncome();
   const weeklyBills = calculateWeeklyBills();

@@ -1,11 +1,34 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { useFormValidation } from '../../hooks/useFormValidation';
+import { createValidationRules } from '../../utils/validationRules';
+import Input from '../Input/Input';
+import './Login.css';
 
 const Login = () => {
+  // Initial form values for login (no name or confirmPassword)
+  const initialValues = {
+    email: '',
+    password: ''
+  };
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // Get validation rules for login (false = not signup)
+  const validationRules = createValidationRules(false);
+
+  // Use our custom hook
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    validateAll
+  } = useFormValidation(initialValues, validationRules);
+
+  // State for form submission
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Redirect if already logged in
   useEffect(() => {
     if (localStorage.getItem('token')) {
       window.location = '/';
@@ -14,45 +37,98 @@ const Login = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError('')
+    setError('');
 
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
+    // Validate all fields before submitting
+    if (!validateAll()) {
+      return;
+    }
 
+    setIsLoading(true);
 
-    const data = await res.json();
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password
+        })
+      });
 
-    if (res.ok) {
-      localStorage.setItem('token', data.token);
-      window.location = '/dashboard';
-    } else {
-      setError(data.message || 'Login failed');
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        window.location = '/';
+      } else {
+        setError(data.message || 'Login failed');
+      }
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
-
   return (
-    <div>
-      <form action="" onSubmit={handleSubmit}>
-        <input type="text"
-          placeholder='Enter your email'
-          value={email}
-          onChange={e => setEmail(e.target.value)}
+    <div className="login-container">
+      <h2 className="login-title">Login</h2>
+
+      <form onSubmit={handleSubmit} className="login-form">
+        {/* Email field */}
+        <Input
+          name="email"
+          type="email"
+          placeholder="Enter your email"
+          value={values.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.email}
+          touched={touched.email}
+          disabled={isLoading}
         />
-        <input
+
+        {/* Password field */}
+        <Input
+          name="password"
           type="password"
           placeholder="Enter your password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
+          value={values.password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors.password}
+          touched={touched.password}
+          showPasswordToggle={true}
+          disabled={isLoading}
         />
-        <button type="submit">Login</button>
-      </form>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-    </div>
-  )
-}
 
-export default Login
+        {/* Error message */}
+        {error && (
+          <div className="error-message">
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Submit button */}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="submit-button"
+        >
+          {isLoading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
+
+      <p className="login-footer">
+        Don't have an account?{' '}
+        <a href="/signup" className="login-link">
+          Sign up here
+        </a>
+      </p>
+    </div>
+  );
+};
+
+export default Login;

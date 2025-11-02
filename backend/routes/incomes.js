@@ -19,6 +19,7 @@ router.post('/', authMiddleware, async (req, res) => {
     amount: req.body.amount,
     description: req.body.description,
     frequency: req.body.frequency,
+    startDate: req.body.startDate,
     userId: req.user.id
   });
 
