@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import { createValidationRules } from '../../utils/validationRules';
+import { authAPI } from '../../services/api';
 import Input from '../Input/Input';
 import './Login.css';
 
@@ -47,25 +48,17 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: values.email,
-          password: values.password
-        })
+      const response = await authAPI.login({
+        email: values.email,
+        password: values.password
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem('token', data.token);
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
         window.location = '/';
-      } else {
-        setError(data.message || 'Login failed');
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

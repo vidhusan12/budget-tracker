@@ -3,6 +3,7 @@ import { useFormValidation } from '../../hooks/useFormValidation';
 import { createValidationRules } from '../../utils/validationRules';
 import Input from '../Input/Input';
 import PasswordStrength from '../PasswordStrength/PasswordStrength';
+import { authAPI } from '../../services/api';
 import './Signup.css';
 
 
@@ -22,7 +23,7 @@ const Signup = () => {
     errors,
     touched,
     handleChange,
-    handleBlur, 
+    handleBlur,
     validateAll
   } = useFormValidation(initialValues, validationRules);
 
@@ -47,26 +48,18 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          password: values.password
-        })
+      const response = await authAPI.signup({
+        name: values.name,
+        email: values.email,
+        password: values.password
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem('token', data.token);
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
         window.location = '/';
-      } else {
-        setError(data.message || 'Signup failed');
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError(err.response?.data?.message || 'Signup failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

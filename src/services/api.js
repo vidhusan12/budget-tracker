@@ -57,3 +57,9 @@ export const savingsAPI = {
 export const userAPI = {
   getProfile: () => apiClient.get('/user/profile')
 };
+
+// Auth API
+export const authAPI = {
+  signup: (userData) => apiClient.post('/auth/signup', userData),
+  login: (credentials) => apiClient.post('/auth/login', credentials)
+};
