@@ -55,7 +55,7 @@ export const savingsAPI = {
 
 // User API
 export const userAPI = {
-  getProfile: () => apiClient.get('/user/profile')
+  getProfile: () => apiClient.get('/users/profile')
 };
 
 // Auth API

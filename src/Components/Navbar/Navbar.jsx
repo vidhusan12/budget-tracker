@@ -22,11 +22,22 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      console.log('🔑 Token:', token ? 'EXISTS' : 'MISSING');
+
+      if (!token) {
+        console.log('❌ No token, skipping user fetch');
+        return;
+      }
+
       try {
+        console.log('📡 Fetching user profile...');
         const res = await userAPI.getProfile();
+        console.log('✅ User fetched:', res.data);
         setUser(res.data);
       } catch (error) {
-        console.error('Not logged in')
+        console.error('❌ Error fetching user:', error.response?.data || error.message);
+        localStorage.removeItem('token'); 
       }
     };
     fetchUser();

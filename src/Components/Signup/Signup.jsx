@@ -4,10 +4,12 @@ import { createValidationRules } from '../../utils/validationRules';
 import Input from '../Input/Input';
 import PasswordStrength from '../PasswordStrength/PasswordStrength';
 import { authAPI } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 import './Signup.css';
 
 
 const Signup = () => {
+  const navigate = useNavigate();
   const initialValues = {
     name: '',
     email: '',
@@ -33,7 +35,8 @@ const Signup = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      window.location = '/';
+      navigate('/');
+      window.location.reload();
     }
   }, []);
 

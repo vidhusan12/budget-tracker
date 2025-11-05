@@ -15,7 +15,7 @@ const authMiddleware = (req, res, next) => {
   // Verify token
   let decoded;
   try {
-    decoded = jwt.verify(token, 'your-secret-key-change-this');
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
     return res.status(401).json({ message: 'Invalid token' });
   }

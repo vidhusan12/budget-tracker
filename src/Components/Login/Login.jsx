@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useFormValidation } from '../../hooks/useFormValidation';
 import { createValidationRules } from '../../utils/validationRules';
 import { authAPI } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 import Input from '../Input/Input';
 import './Login.css';
 
 const Login = () => {
+  const navigate = useNavigate();
   // Initial form values for login (no name or confirmPassword)
   const initialValues = {
     email: '',
@@ -32,7 +34,8 @@ const Login = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      window.location = '/';
+      navigate('/');
+      window.location.reload();
     }
   }, []);
 
