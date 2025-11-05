@@ -30,7 +30,7 @@ app.use('/api/incomes', incomeRoutes);
 app.use('/api/bills', billRoutes);
 app.use('/api/savings', savingsRoutes);  
 app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/user', userRoutes);
 
 
 // Test route
